@@ -1,0 +1,6 @@
+alias .='cd .'
+alias ..='cd ..'
+alias d='ls -lrth'
+alias dir='ls -laFh'
+alias del='rm -rf'
+alias cls='clear'
