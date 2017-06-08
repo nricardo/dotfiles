@@ -1,7 +1,3 @@
-# ~/.bashrc: executed by bash(1) for non-login shells.
-# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
-# for examples
-
 # If not running interactively, don't do anything
 case $- in
     *i*) ;;
@@ -85,7 +81,7 @@ if [ -x /usr/bin/dircolors ]; then
 fi
 
 # colored GCC warnings and errors
-#export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
 # some more ls aliases
 alias ll='ls -alF'
@@ -100,7 +96,7 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
-[[ -f .bash_aliases ]] && . .bash_aliases
+[[ -f ~/.bash_aliases ]] && source ~/.bash_aliases
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
@@ -113,14 +109,6 @@ if ! shopt -oq posix; then
   fi
 fi
 
-# if running bash
-if [ -n "$BASH_VERSION" ]; then
-    # include .bashrc if it exists
-    if [ -f "$HOME/.bashrc" ]; then
-    	. "$HOME/.bashrc"
-    fi
-fi
-
 # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/bin" ] ; then
     PATH="$HOME/bin:$PATH"
@@ -130,10 +118,7 @@ fi
 TERM="xterm-256color"
 
 # set dircolors to solarized dark theme
-eval `dircolors .dircolors/dircolors.256dark`
-
-# Your place for hosting Git repos. I use this for private repos.
-export GIT_HOSTING='git@git.domain.com'
+eval `dircolors ~/.dircolors/dircolors.256dark`
 
 # Don't check mail when opening terminal.
 unset MAILCHECK
@@ -144,5 +129,5 @@ export IRC_CLIENT='irssi'
 # Set this to the command you use for todo.txt-cli
 export TODO="t"
 
-# call custom bash shell
-[[ -f ".bash_powerline" ]] && . .bash_powerline
+# call custom bash prompt style
+[[ -f ~/.bash_prompt ]] && source ~/.bash_prompt

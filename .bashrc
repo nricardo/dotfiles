@@ -1,2 +1,4 @@
-# load profile, if any...
-[[ -f ".bash_profile" ]] && . .bash_profile
+# just call our profile...
+if [ -f ~/.bash_profile ]; then
+  source ~/.bash_profile
+fi
