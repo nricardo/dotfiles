@@ -9,15 +9,17 @@ __install() {
 		".bash_profile"
 		".bashrc"
 		".dircolors"
-		".git"
 		".gitconfig"
 		".npmrc"
 	);
 
 	# create links on user's home
 	for f in ${DOTFILES[@]}; do
+		if [ -d ~/.dotfiles/${f} ]; then
+			ln -sfv ~/.dotfiles/${f} ~/${f}
+		fi
 		if [ -f ~/.dotfiles/${f} ]; then
-			ln -sfv ~/.dotfiles/${f} ~
+			ln -sfv ~/.dotfiles/${f} ~/${f}
 		fi
 	done
 }

@@ -89,10 +89,10 @@ __powerline() {
         PS1=""
 
         # user/host info
-        __user_info 015 242
+        __user_info 252 026
 
         # working directory
-        __cwd_info 252 026
+        __cwd_info 015 242
 
         # GIT info
         __git_info
