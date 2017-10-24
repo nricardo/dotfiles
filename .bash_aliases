@@ -8,7 +8,7 @@ alias cls='clear'
 
 # git aliases
 alias gl='git ld'
-alias gs='git status '
+alias gs='git status -s '
 alias ga='git add '
 alias gb='git branch '
 alias gc='git commit'

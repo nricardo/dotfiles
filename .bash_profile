@@ -118,7 +118,7 @@ fi
 TERM="xterm-256color"
 
 # set dircolors to solarized dark theme
-eval `dircolors ~/.dircolors/dircolors.256dark`
+eval `dircolors .dircolors/dircolors.256dark`
 
 # Don't check mail when opening terminal.
 unset MAILCHECK

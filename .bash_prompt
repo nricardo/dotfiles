@@ -2,12 +2,23 @@
 
 # Resets terminal colors
 NORMAL="\[\e[0m\]"
+BOLD="\[\e[1m\]"
+DIM="\[\e[2m\]"
 
 # PS symbols
-PS_SHELL_SYMBOL=''
+PS_HOME_SYMBOL=''
+PS_USER_SYMBOL=''
+PS_LOCKED_SYMBOL=''
+PS_FOLDER_SYMBOL=''
 PS_SEPARATOR_SYMBOL=''
+PS_SHELL_OK_SYMBOL=''
+PS_SHELL_ERROR_SYMBOL=''
+
+# Some other NF symbols
+#     
 
 # GIT symbols
+GIT_BADGE_SYMBOL=''
 GIT_BRANCH_SYMBOL=''
 GIT_PUSH_SYMBOL='⇡'
 GIT_PULL_SYMBOL='⇣'
@@ -36,11 +47,18 @@ __powerline() {
 
     __user_info() {
         __segment $1 $2
-        PS1+=" \u@\h "
+        [[ -w "${PWD}" ]] && PS1+=" ${PS_USER_SYMBOL}" || PS1+=" $(__colors 196 $2)${PS_LOCKED_SYMBOL}$(__colors $1 $2)"
+        PS1+=" \u "
+    }
+
+    __host_info() {
+        __segment $1 $2
+        PS1+=" \h "
     }
 
     __cwd_info() {
         __segment $1 $2
+        [[ "${PWD}" == *"${HOME}"* ]] && PS1+=" ${PS_HOME_SYMBOL} " || PS1+=" ${PS_FOLDER_SYMBOL} "
         PS1+=" \w "
     }
 
@@ -73,19 +91,31 @@ __powerline() {
         fi
 
         __segment ${__GIT_FG_COLOR} ${__GIT_BG_COLOR}
-        PS1+=" ${GIT_BRANCH_SYMBOL}${branch}${marks} "
-    }
-
-    __reset() {
-        PS1+="${NORMAL} "
+        PS1+=" ${GIT_BADGE_SYMBOL} ${GIT_BRANCH_SYMBOL} ${branch}${marks} "
     }
 
     __end() {
+        if [[ "$1" -eq 0 ]]; then
+            __nop
+            #__segment 252 245
+            #PS1+=" ${PS_SHELL_OK_SYMBOL} "
+        else
+            __segment 252 196
+            PS1+=" ${PS_SHELL_ERROR_SYMBOL} ${__EXIT_CODE} "
+        fi
+
+        PS1+="${NORMAL}"
         __separator ${__BG_COLOR}
-        __reset
+        PS1+="${NORMAL} "
+    }
+
+    __nop() {
+        return
     }
 
     ps1() {
+        local __EXIT_CODE="$?"
+
         PS1=""
 
         # user/host info
@@ -98,7 +128,7 @@ __powerline() {
         __git_info
 
         # finish prompt
-        __end
+        __end ${__EXIT_CODE}
     }
 
     PROMPT_COMMAND=ps1
