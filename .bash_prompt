@@ -21,8 +21,8 @@ PS_SHELL_ERROR_SYMBOL=''
 # GIT symbols
 GIT_BADGE_SYMBOL=''
 GIT_BRANCH_SYMBOL=''
-GIT_PUSH_SYMBOL='⇡'
-GIT_PULL_SYMBOL='⇣'
+GIT_PUSH_SYMBOL='↑'
+GIT_PULL_SYMBOL='↓'
 
 __powerline() {
     __FG_COLOR=""
@@ -93,8 +93,8 @@ __powerline() {
         local __GIT_BG_COLOR=041
 
         if [ -n "$(git status --porcelain)" ]; then
-            __GIT_FG_COLOR=235
-            __GIT_BG_COLOR=184
+            __GIT_FG_COLOR=000
+            __GIT_BG_COLOR=226
         fi
 
         __segment ${__GIT_FG_COLOR} ${__GIT_BG_COLOR}

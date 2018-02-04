@@ -1,3 +1,5 @@
+[core]
+  excludesfile = ~/.gitignore
 [user]
 	email = nelson.s.ricardo@gmail.com
 	name = nricardo

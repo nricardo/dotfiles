@@ -3,7 +3,7 @@
 __install() {
 	# list of dotfiles
 	local DOTFILES=(
-		".dircolors/"
+		".dircolors"
 		".bash_aliases"
 		".bash_logout"
 		".bash_prompt"
