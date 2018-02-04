@@ -8,6 +8,7 @@ DIM="\[\e[2m\]"
 # PS symbols
 PS_HOME_SYMBOL=''
 PS_USER_SYMBOL=''
+PS_PWD_SYMBOL=''
 PS_LOCKED_SYMBOL=''
 PS_FOLDER_SYMBOL=''
 PS_SEPARATOR_SYMBOL=''
@@ -57,9 +58,15 @@ __powerline() {
     }
 
     __cwd_info() {
+        local __PATH
         __segment $1 $2
-        [[ "${PWD}" == *"${HOME}"* ]] && PS1+=" ${PS_HOME_SYMBOL} " || PS1+=" ${PS_FOLDER_SYMBOL} "
-        PS1+=" \w "
+        __PATH=${PWD//${HOME}/}
+        __PATH=(${__PATH//\// })
+        [[ "${PWD}" == *"${HOME}"* ]] && PS1+=" ${PS_HOME_SYMBOL}  " || PS1+=" ${PS_FOLDER_SYMBOL}  "
+        for i in ${!__PATH[@]}; do
+            [[ $i -gt 0 ]] && PS1+="$(__colors 250 $2)${PS_PWD_SYMBOL}$(__colors $1 $2) "
+            PS1+="${__PATH[$i]} "
+        done
     }
 
     __git_info() {
@@ -74,8 +81,8 @@ __powerline() {
 
         # how many commits local branch is ahead/behind of remote?
         local stat="$(git status --porcelain --branch | grep '^##' | grep -o '\[.\+\]$')"
-        local aheadN="$(echo $stat | grep -o 'ahead \d\+' | grep -o '\d\+')"
-        local behindN="$(echo $stat | grep -o 'behind \d\+' | grep -o '\d\+')"
+        local aheadN="$(echo $stat | grep ahead | grep -o '[0-9]*')"
+        local behindN="$(echo $stat | grep behind | grep -o '[0-9]*')"
 
         [ -n "$aheadN"  ] && marks+=" $GIT_PUSH_SYMBOL$aheadN"
         [ -n "$behindN" ] && marks+=" $GIT_PULL_SYMBOL$behindN"
