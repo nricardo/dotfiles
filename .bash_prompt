@@ -71,21 +71,23 @@ __powerline() {
 
     __git_info() {
         [ -x "$(which git)" ] || return    # git not found
-	    [ -d .git ] || return              # no .git directory
+	      [ -d .git ] || return              # no .git directory
+
+        # get remote upstream name
+        local remote="$(git remote)"
+        [ -n "$remote" ] || return  # no upstream defined
 
         # get current branch name or short SHA1 hash for detached head
         local branch="$(git symbolic-ref --short HEAD 2>/dev/null || git describe --tags --always 2>/dev/null)"
         [ -n "$branch" ] || return  # git branch not found
 
-        local marks
-
         # how many commits local branch is ahead/behind of remote?
-        local stat="$(git status --porcelain --branch | grep '^##' | grep -o '\[.\+\]$')"
-        local aheadN="$(echo $stat | grep ahead | grep -o '[0-9]*')"
-        local behindN="$(echo $stat | grep behind | grep -o '[0-9]*')"
+        local aheadN="$(git rev-list ${remote}/${branch}..${branch} --count)"
+        local behindN="$(git rev-list ${branch}..${remote}/${branch} --count)"
 
-        [ -n "$aheadN"  ] && marks+=" $GIT_PUSH_SYMBOL$aheadN"
-        [ -n "$behindN" ] && marks+=" $GIT_PULL_SYMBOL$behindN"
+        local marks
+        [[ -n "$aheadN" ]] && [[ $aheadN -gt 0 ]] && marks+=" $GIT_PUSH_SYMBOL$aheadN"
+        [[ -n "$behindN" ]] && [[ $behindN -gt 0 ]] && marks+=" $GIT_PULL_SYMBOL$behindN"
 
         # print the git branch segment without a trailing newline
         # branch is modified?
