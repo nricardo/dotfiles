@@ -12,7 +12,7 @@ PS_PWD_SYMBOL=''
 PS_LOCKED_SYMBOL=''
 PS_FOLDER_SYMBOL=''
 PS_SEPARATOR_SYMBOL=''
-PS_SHELL_OK_SYMBOL=''
+PS_SHELL_OK_SYMBOL=''
 PS_SHELL_ERROR_SYMBOL=''
 
 # Some other NF symbols
@@ -26,7 +26,7 @@ GIT_PULL_SYMBOL='↓'
 
 __powerline() {
     __FG_COLOR=""
-    __BG_COLOR=""
+    __BG_COLOR="$(printf '\[\e11;?\]')"
 
     __colors() {
         printf "\[\e[38;5;$1m\]\[\e[48;5;$2m\]"
@@ -71,19 +71,19 @@ __powerline() {
 
     __git_info() {
         [ -x "$(which git)" ] || return    # git not found
-	      [ -d .git ] || return              # no .git directory
+	    [ -d .git ] || return              # no .git directory
 
         # get remote upstream name
         local remote="$(git remote)"
-        [ -n "$remote" ] || return  # no upstream defined
+        # [ -n "$remote" ] || return  # no upstream defined
 
         # get current branch name or short SHA1 hash for detached head
         local branch="$(git symbolic-ref --short HEAD 2>/dev/null || git describe --tags --always 2>/dev/null)"
         [ -n "$branch" ] || return  # git branch not found
 
         # how many commits local branch is ahead/behind of remote?
-        local aheadN="$(git rev-list ${remote}/${branch}..${branch} --count)"
-        local behindN="$(git rev-list ${branch}..${remote}/${branch} --count)"
+        local aheadN="$(git rev-list ${remote}/${branch}..${branch} --count 2>/dev/null)"
+        local behindN="$(git rev-list ${branch}..${remote}/${branch} --count 2>/dev/null)"
 
         local marks
         [[ -n "$aheadN" ]] && [[ $aheadN -gt 0 ]] && marks+=" $GIT_PUSH_SYMBOL$aheadN"
@@ -103,29 +103,30 @@ __powerline() {
         PS1+=" ${GIT_BADGE_SYMBOL} ${GIT_BRANCH_SYMBOL} ${branch}${marks} "
     }
 
-    __end() {
+    __ret_info() {
         if [[ "$1" -eq 0 ]]; then
-            __nop
-            #__segment 252 245
-            #PS1+=" ${PS_SHELL_OK_SYMBOL} "
+            # __nop
+            __segment 040 008
+            PS1+=" ${PS_SHELL_OK_SYMBOL} "
         else
             __segment 252 196
             PS1+=" ${PS_SHELL_ERROR_SYMBOL} ${__EXIT_CODE} "
         fi
+    }
 
+    __end() {
         PS1+="${NORMAL}"
         __separator ${__BG_COLOR}
         PS1+="${NORMAL} "
-    }
-
-    __nop() {
-        return
     }
 
     ps1() {
         local __EXIT_CODE="$?"
 
         PS1=""
+
+        # shell return code
+        __ret_info ${__EXIT_CODE}
 
         # user/host info
         __user_info 252 026
@@ -137,7 +138,7 @@ __powerline() {
         __git_info
 
         # finish prompt
-        __end ${__EXIT_CODE}
+        __end
     }
 
     PROMPT_COMMAND=ps1
