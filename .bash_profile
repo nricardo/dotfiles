@@ -119,7 +119,7 @@ fi
 TERM="xterm-256color"
 
 # set dircolors to solarized dark theme
-eval `dircolors ~/.dircolors/dircolors.256dark`
+#eval `dircolors ~/.dircolors/dircolors.256dark`
 
 # Don't check mail when opening terminal.
 unset MAILCHECK
@@ -130,5 +130,24 @@ export IRC_CLIENT='irssi'
 # Set this to the command you use for todo.txt-cli
 export TODO="t"
 
+# setup JAVA/JDK home paths
+export JDK_HOME="/Library/Java/Home"
+export JAVA_HOME="/Library/Java/Home"
+
+# NODE Version Manager (NVM)
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh" # This loads nvm
+
+# Set UTF-8 locale
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+
 # call custom bash prompt style
 [[ -f ~/.bash_prompt ]] && source ~/.bash_prompt
+
+# add bash completion
+[ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
+[ -f ~/.git-flow-completion.bash ] && . ~/.git-flow-completion.bash
+
+# run custom/local configs
+[[ -f ~/.bash.local ]] && source ~/.bash.local

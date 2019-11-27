@@ -1,5 +1,5 @@
 [core]
-  excludesfile = ~/.gitignore
+	excludesfile = /Users/nelson.ricardo/.gitignore_global
 [user]
 	email = nelson.s.ricardo@gmail.com
 	name = nricardo
@@ -18,3 +18,11 @@
   ld = log --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=relative
   type = cat-file -t
   dump = cat-file -p
+[http]
+	sslVerify = false
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true

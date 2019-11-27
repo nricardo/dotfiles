@@ -8,6 +8,7 @@ DIM="\[\e[2m\]"
 # PS symbols
 PS_HOME_SYMBOL=''
 PS_USER_SYMBOL=''
+PS_CMD_SYMBOL=''
 PS_PWD_SYMBOL=''
 PS_LOCKED_SYMBOL=''
 PS_FOLDER_SYMBOL=''
@@ -114,10 +115,23 @@ __powerline() {
         fi
     }
 
-    __end() {
+    __ret_info2() {
+        # __separator ${__BG_COLOR}
         PS1+="${NORMAL}"
         __separator ${__BG_COLOR}
-        PS1+="${NORMAL} "
+        PS1+="\n${NORMAL}"
+        if [[ "$1" -eq 0 ]]; then
+            # __nop
+            # __segment 040 008
+            PS1+=" $(__colors 040)${PS_SHELL_OK_SYMBOL} "
+        else
+            # __segment 252 196
+            PS1+=" $(__colors 196)${PS_SHELL_ERROR_SYMBOL} "
+        fi
+    }
+
+    __end() {
+        PS1+="$(__colors 238)${PS_CMD_SYMBOL} ${NORMAL}"
     }
 
     ps1() {
@@ -125,19 +139,19 @@ __powerline() {
 
         PS1=""
 
-        # shell return code
-        __ret_info ${__EXIT_CODE}
-
         # user/host info
-        __user_info 252 026
+        # __user_info 252 026
 
         # working directory
-        __cwd_info 015 242
+        __cwd_info 252 026 # 015 242
 
         # GIT info
         __git_info
 
-        # finish prompt
+        # shell return code
+        __ret_info2 ${__EXIT_CODE}
+
+        # finish
         __end
     }
 
